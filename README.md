@@ -1,4 +1,4 @@
-# first-vue
+# Simple Counter App
 
 ## Project setup
 ```
