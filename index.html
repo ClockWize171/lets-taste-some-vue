@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <title>Vue Start</title>
+  </head>
+  <body>
+    <nav
+      class="navbar navbar-expand-lg"
+      :class="[`navbar-${theme}`, `bg-${theme}`]"
+    >
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">VueJs</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li v-for="(page, index) in pages" class="nav-item" :key="index">
+              <a
+                class="nav-link"
+                :class="{active: activePage === index}"
+                aria-current="page"
+                :href="page.link.url"
+                @click.prevent="activePage = index"
+              >
+                {{page.link.text}}
+              </a>
+            </li>
+          </ul>
+          <form class="d-flex">
+            <button class="btn btn-primary" @click.prevent="changeTheme()">
+              {{theme}}
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+    <page-viewer
+      :page="pages[activePage]"
+    />
+  </body>
+</html>
+<script>
+  let app = Vue.createApp({
+    // computed: {
+    //   navbarClasses() {
+    //     return {
+    //       "navbar-light bg-light": !this.useDarkNavbar,
+    //       "navbar-dark bg-dark": this.useDarkNavbar,
+    //     };
+    //   },
+    // },
+    data() {
+      return {
+        activePage: 0,
+        theme: "light",
+        pages: [
+          {
+            link: { text: "Home", url: "home.html" },
+            pageTitle: "Home Page",
+            content: "This is home content",
+          },
+          {
+            link: { text: "About", url: "about.html" },
+            pageTitle: "About Page",
+            content: "This is About content",
+          },
+          {
+            link: { text: "Contact", url: "contact.html" },
+            pageTitle: "Contact Page",
+            content: "This is Contact content",
+          },
+        ],
+      };
+    },
+    methods: {
+      changeTheme() {
+        let theme = "light";
+        if (this.theme === "light") {
+          theme = "dark";
+        }
+
+        this.theme = theme;
+      },
+    },
+  });
+  app.component("page-viewer", {
+    props: ["page"],
+    template: `
+    <div class="container">
+      <h1>{{page.pageTitle}}</h1>
+      <p>{{page.content}}</p>
+    </div>
+    `,
+  });
+  app.component("navbar", {
+    props: [],
+    template: `
+    <div class="container">
+      <h1>{{page.pageTitle}}</h1>
+      <p>{{page.content}}</p>
+    </div>
+    `,
+  });
+  app.mount("body");
+</script>
